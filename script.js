@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     burger.classList.toggle("toggle")
   })
 
-  // Close mobile menu 
+  // Close mobile menu
   navLinks.forEach((link) => {
     link.addEventListener("click", () => {
       if (nav.classList.contains("nav-active")) {
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (elementTop < windowHeight && elementTop > -elementHeight) {
         const scrolled = (windowHeight - elementTop) / (windowHeight + elementHeight)
-        const translateY = scrolled * 30 
+        const translateY = scrolled * 30
 
         element.style.transform = `translateY(${translateY}px)`
       }
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Deleting text
       typewriterText.textContent = currentRole.substring(0, charIndex - 1)
       charIndex--
-      typingSpeed = 50 
+      typingSpeed = 50
     } else {
       // Typing text
       typewriterText.textContent = currentRole.substring(0, charIndex + 1)
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // If finished typing the current role
     if (!isDeleting && charIndex === currentRole.length) {
       isDeleting = false
-      typingSpeed = 1500 
+      typingSpeed = 1500
       setTimeout(() => {
         isDeleting = true
       }, typingSpeed)
@@ -132,8 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // If finished deleting the current role
     else if (isDeleting && charIndex === 0) {
       isDeleting = false
-      roleIndex = (roleIndex + 1) % roles.length 
-      typingSpeed = 500 
+      roleIndex = (roleIndex + 1) % roles.length
+      typingSpeed = 500
     }
 
     setTimeout(type, typingSpeed)
@@ -176,9 +176,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Proper size of video for mobile
       if (window.innerWidth <= 768) {
-        document.querySelector(".modal-content").style.width = "95%"
+        document.querySelector(".modal-content").style.width = "100%"
+        document.querySelector(".modal-content").style.height = "auto"
+        projectVideo.style.width = "100%"
+        projectVideo.style.height = "auto"
+        projectVideo.style.maxHeight = "80vh" 
       } else {
         document.querySelector(".modal-content").style.width = "80%"
+        projectVideo.style.width = "100%"
+        projectVideo.style.height = "auto"
       }
 
       projectVideo.load()
@@ -253,7 +259,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   window.addEventListener("load", animateProgressBars)
-
 
   // Function to check if device is mobile
   function isMobile() {
