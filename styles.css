@@ -792,56 +792,23 @@ nav {
   z-index: 1001;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 }
 
 .modal-content {
   position: relative;
   width: 80%;
-  max-width: 1000px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* mobile experience */
-@media screen and (max-width: 768px) {
-  .modal-content {
-    width: 100%;
-    height: auto;
-    margin: 0;
-    padding: 0;
-  }
-
-  .video-modal {
-    padding: 0;
-    align-items: center;
-  }
-
-  #project-video {
-    width: 100%;
-    height: auto;
-    max-height: 80vh;
-    object-fit: contain;
-  }
-
-  .close-modal {
-    top: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1002;
-  }
-
-  .video-title {
-    position: absolute;
-    bottom: 10px;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-  }
+#project-video {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  display: block;
+  border-radius: 10px;
+  background-color: #000;
 }
 
 .close-modal {
@@ -852,25 +819,11 @@ nav {
   color: white;
   cursor: pointer;
   transition: var(--transition);
+  z-index: 1002;
 }
 
 .close-modal:hover {
   color: var(--primary-color);
-}
-
-.video-modal .video-container {
-  width: 100%;
-  padding-top: 56.25%;
-  position: relative;
-}
-
-#project-video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
 }
 
 .video-title {
@@ -880,7 +833,48 @@ nav {
   font-size: 1.5rem;
 }
 
-/* Contact Section */
+/* mobile experience */
+@media screen and (max-width: 768px) {
+  .modal-content {
+    width: 100%;
+    margin: 0;
+  }
+
+  .video-modal {
+    padding: 0;
+  }
+
+  #project-video {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    border-radius: 0;
+  }
+
+  .close-modal {
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  .video-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    margin: 0;
+  }
+}
+
 .contact-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
