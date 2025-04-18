@@ -157,12 +157,18 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
+  // Function to check if device is mobile
+  function isMobile() {
+    return window.innerWidth <= 768
+  }
+
   // Video modal
   const videoContainers = document.querySelectorAll(".video-container")
   const videoModal = document.getElementById("video-modal")
   const projectVideo = document.getElementById("project-video")
   const videoTitle = document.getElementById("video-title")
   const closeModal = document.querySelector(".close-modal")
+  const modalContent = document.querySelector(".modal-content")
 
   videoContainers.forEach((container) => {
     container.addEventListener("click", () => {
@@ -174,17 +180,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       videoModal.style.display = "flex"
 
-      // Proper size of video for mobile
-      if (window.innerWidth <= 768) {
-        document.querySelector(".modal-content").style.width = "100%"
-        document.querySelector(".modal-content").style.height = "auto"
+      // Proper size of video for mobile vs desktop
+      if (isMobile()) {
+        modalContent.style.width = "100%"
+        modalContent.style.height = "auto"
         projectVideo.style.width = "100%"
         projectVideo.style.height = "auto"
-        projectVideo.style.maxHeight = "80vh" 
+        projectVideo.style.maxHeight = "80vh" // Set maximum height to 80% of viewport height
       } else {
-        document.querySelector(".modal-content").style.width = "80%"
+        modalContent.style.width = "80%"
+        modalContent.style.height = "auto"
         projectVideo.style.width = "100%"
         projectVideo.style.height = "auto"
+        projectVideo.style.maxHeight = "80vh" // Also limit height on desktop for consistency
       }
 
       projectVideo.load()
@@ -260,10 +268,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("load", animateProgressBars)
 
-  // Function to check if device is mobile
-  function isMobile() {
-    return window.innerWidth <= 768
-  }
+  // Project showcase tilt effect
+  const projectShowcases = document.querySelectorAll(".project-showcase")
 
   projectShowcases.forEach((card) => {
     card.addEventListener("mousemove", (e) => {
