@@ -1,7 +1,7 @@
 /* Base Styles */
 :root {
-  --primary-color: #5C899D; 
-  --primary-dark: #4a7080; 
+  --primary-color: #5c899d;
+  --primary-dark: #4a7080;
   --secondary-color: #6c757d;
   --dark-color: #212529;
   --light-color: #f8f9fa;
@@ -803,22 +803,44 @@ nav {
 /* mobile experience */
 @media screen and (max-width: 768px) {
   .modal-content {
-    width: 95%;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
   }
 
   .video-modal {
-    padding: 10px;
+    padding: 0;
+    align-items: center;
   }
 
   #project-video {
     width: 100%;
     height: auto;
-    min-height: 300px; /* minimum height on mobile */
+    max-height: 80vh;
+    object-fit: contain;
   }
 
   .close-modal {
-    top: -30px;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+  }
+
+  .video-title {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
     right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
   }
 }
 
