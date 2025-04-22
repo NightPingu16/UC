@@ -142,35 +142,71 @@ document.addEventListener("DOMContentLoaded", () => {
   // Start the typewriter effect
   setTimeout(type, 1000)
 
-  // Video preview hover effect
-  // Auto-play videos when scrolled into view
+  // Video preview optimization - Play all videos but with optimizations
   const previewVideos = document.querySelectorAll(".preview-video")
 
-  // Create an Intersection Observer
-  const videoObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const video = entry.target
-
-        if (entry.isIntersecting) {
-          // Play video when it comes into view
-          video.play()
-        } else {
-          // Pause video when it goes out of view
-          video.pause()
-          // Reset video position if you want videos to restart when they come back into view
-          // video.currentTime = 0
-        }
-      })
-    },
-    {
-      threshold: 0.5, // Video will play when at least 50% visible
-    },
-  )
-
-  // Observe all preview videos
+  // Pre-optimize all videos for better performance
   previewVideos.forEach((video) => {
-    videoObserver.observe(video)
+    // Set video attributes for better performance
+    video.setAttribute("playsinline", "")
+    video.setAttribute("muted", "")
+    video.muted = true // Explicitly set muted property
+    video.setAttribute("preload", "metadata") // Only preload metadata initially
+    video.setAttribute("disablePictureInPicture", "") // Disable PiP to save resources
+    video.setAttribute("disableRemotePlayback", "") // Disable remote playback
+
+    // Lower video quality for preview if possible
+    if (video.videoHeight > 480) {
+      video.style.height = "auto"
+      video.style.maxHeight = "480px" // Limit display size to reduce rendering load
+    }
+
+    // Reduce framerate if browser supports it
+    if ("mediaSettings" in HTMLVideoElement.prototype) {
+      try {
+        video.mediaSettings = { frameRate: 24 } // Lower framerate if supported
+      } catch (e) {
+        // Browser doesn't support this API
+      }
+    }
+  })
+
+  // Create an optimized Intersection Observer
+  const videoObserverOptions = {
+    root: null, // viewport
+    rootMargin: "0px",
+    threshold: 0.3, // Video will play when 30% visible
+  }
+
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target
+
+      if (entry.isIntersecting) {
+        // Only start playing if the video is not already playing
+        if (video.paused) {
+          // Use requestAnimationFrame to stagger video starts slightly
+          requestAnimationFrame(() => {
+            video.play().catch((e) => {
+              console.log("Video play prevented:", e)
+            })
+          })
+        }
+      } else {
+        // Pause when completely out of view
+        if (!video.paused) {
+          video.pause()
+        }
+      }
+    })
+  }, videoObserverOptions)
+
+  // Observe all preview videos with a slight delay between each
+  previewVideos.forEach((video, index) => {
+    // Stagger the observation to prevent all videos from loading at once
+    setTimeout(() => {
+      videoObserver.observe(video)
+    }, index * 100) // 100ms delay between each video
   })
 
   // Video modal
@@ -250,19 +286,26 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
-  // Animate skill icons on scroll
+  // Animate skill icons on scroll - with throttling
   const skillIcons = document.querySelectorAll(".skill-icon")
+  let animationFrameId = null
 
   function animateSkillIcons() {
-    skillIcons.forEach((icon) => {
-      const iconTop = icon.getBoundingClientRect().top
-      const windowHeight = window.innerHeight
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId)
+    }
 
-      if (iconTop < windowHeight - 100) {
-        icon.style.animation = "pulse 2s infinite"
-      } else {
-        icon.style.animation = "none"
-      }
+    animationFrameId = requestAnimationFrame(() => {
+      skillIcons.forEach((icon) => {
+        const iconTop = icon.getBoundingClientRect().top
+        const windowHeight = window.innerHeight
+
+        if (iconTop < windowHeight - 100) {
+          icon.style.animation = "pulse 2s infinite"
+        } else {
+          icon.style.animation = "none"
+        }
+      })
     })
   }
 
@@ -318,17 +361,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.body.appendChild(scrollTopBtn)
 
+  // Throttle scroll events for better performance
+  let scrollTimeout
   window.addEventListener("scroll", () => {
-    if (window.pageYOffset > 300) {
-      scrollTopBtn.style.display = "block"
-      scrollTopBtn.style.opacity = "1"
-    } else {
-      scrollTopBtn.style.opacity = "0"
-      setTimeout(() => {
-        if (window.pageYOffset <= 300) {
-          scrollTopBtn.style.display = "none"
+    if (!scrollTimeout) {
+      scrollTimeout = setTimeout(() => {
+        if (window.pageYOffset > 300) {
+          scrollTopBtn.style.display = "block"
+          scrollTopBtn.style.opacity = "1"
+        } else {
+          scrollTopBtn.style.opacity = "0"
+          setTimeout(() => {
+            if (window.pageYOffset <= 300) {
+              scrollTopBtn.style.display = "none"
+            }
+          }, 300)
         }
-      }, 300)
+        scrollTimeout = null
+      }, 100)
     }
   })
 
