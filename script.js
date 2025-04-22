@@ -143,18 +143,34 @@ document.addEventListener("DOMContentLoaded", () => {
   setTimeout(type, 1000)
 
   // Video preview hover effect
+  // Auto-play videos when scrolled into view
   const previewVideos = document.querySelectorAll(".preview-video")
 
+  // Create an Intersection Observer
+  const videoObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target
+
+        if (entry.isIntersecting) {
+          // Play video when it comes into view
+          video.play()
+        } else {
+          // Pause video when it goes out of view
+          video.pause()
+          // Reset video position if you want videos to restart when they come back into view
+          // video.currentTime = 0
+        }
+      })
+    },
+    {
+      threshold: 0.5, // Video will play when at least 50% visible
+    },
+  )
+
+  // Observe all preview videos
   previewVideos.forEach((video) => {
-    const videoContainer = video.parentElement
-
-    videoContainer.addEventListener("mouseenter", () => {
-      video.play()
-    })
-
-    videoContainer.addEventListener("mouseleave", () => {
-      video.pause()
-    })
+    videoObserver.observe(video)
   })
 
   // Video modal
@@ -279,7 +295,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fix for project showcases
   const projectShowcases = document.querySelectorAll(".project-showcase")
-
 
   // Scroll to top button
   const scrollTopBtn = document.createElement("button")
